@@ -1,0 +1,30 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>BMI Calculator</title>
+	<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+	<div class="container">
+		<h1>BMI Calculator</h1>
+		<form action="/" method="post">
+			<label for="weight">Enter your weight (kg)</label>
+			<input type="text" name="weight" required>
+
+			<label for="height">Enter your height (cm)</label>
+			<input type="text" name="height" required>
+
+			<button type="submit">Calculate</button>
+		</form>
+
+		<% if (result) { %>
+			<div class="result" style="margin-top: 20px; text-align: center; font-weight: bold;">
+				<%= result %>
+			</div>
+		<% } %>
+	</div>
+</body>
+</html>

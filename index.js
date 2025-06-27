@@ -1,21 +1,40 @@
 const express = require("express");
 const bodyparser = require("body-parser");
+const path = require("path");
 
 const app = express();
-app.use(bodyparser.urlencoded({extended:true}));
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "/public"))); // CSS/JS อยู่ใน public/
 
-app.get("/" , function(req , res){
-    res.sendFile(__dirname + "/");
+app.set("view engine", "ejs"); // ใช้ EJS
+app.set("views", path.join(__dirname, "/views")); // มองหาไฟล์ .ejs ใน /views
+
+app.get("/", function (req, res) {
+	res.render("index", { result: null });
 });
 
-app.post("/" , function (req , res){
-    const body = req.body;
-    const weight = parseFloat(body.weight);
-    const height = parseFloat(body.height)/100;
-    const result = weight / (height * height);
-    res.send('Your BMI result is ' + result);
+app.post("/", function (req, res) {
+	const weight = parseFloat(req.body.weight);
+	const height = parseFloat(req.body.height) / 100;
+
+	if (isNaN(weight) || isNaN(height) || height === 0) {
+		return res.render("index", { result: "Invalid input. Please enter valid numbers." });
+	}
+
+	const bmi = weight / (height * height);
+	const rounded = bmi.toFixed(2);
+
+	let category = "";
+	if (bmi < 18.5) category = "Underweight";
+	else if (bmi < 24.9) category = "Normal weight";
+	else if (bmi < 29.9) category = "Overweight";
+	else category = "Obese";
+
+	const resultText = `Your BMI is ${rounded} Category: ${category}`;
+
+	res.render("index", { result: resultText });
 });
 
-app.listen(3000 , function(){
-    console.log("Server is running on port 3000.");
+app.listen(3000, function () {
+	console.log("Server is running on port 3000.");
 });
