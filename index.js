@@ -10,7 +10,7 @@ app.set("view engine", "ejs"); // ใช้ EJS
 app.set("views", path.join(__dirname, "/views")); // มองหาไฟล์ .ejs ใน /views
 
 app.get("/", function (req, res) {
-	res.render("index", { result: null });
+	res.render("index", { result: null, weight: "", height: "" });
 });
 
 app.post("/", function (req, res) {
@@ -18,7 +18,11 @@ app.post("/", function (req, res) {
 	const height = parseFloat(req.body.height) / 100;
 
 	if (isNaN(weight) || isNaN(height) || height === 0) {
-		return res.render("index", { result: "Invalid input. Please enter valid numbers." });
+		return res.render("index", {
+			result: "Invalid input. Please enter valid numbers.",
+			weight: req.body.weight,
+			height: req.body.height
+		});
 	}
 
 	const bmi = weight / (height * height);
@@ -30,9 +34,13 @@ app.post("/", function (req, res) {
 	else if (bmi < 29.9) category = "Overweight";
 	else category = "Obese";
 
-	const resultText = `Your BMI is ${rounded} Category: ${category}`;
+	const resultText = `Your BMI is ${rounded}. Category: ${category}.`;
 
-	res.render("index", { result: resultText });
+	res.render("index", {
+		result: resultText,
+		weight: req.body.weight,
+		height: req.body.height
+	});
 });
 
 const PORT = process.env.PORT || 3000;

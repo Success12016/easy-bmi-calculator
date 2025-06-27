@@ -11,11 +11,11 @@
 	<div class="container">
 		<h1>BMI Calculator</h1>
 		<form action="/" method="post">
-			<label for="weight">Enter your weight (kg)</label>
-			<input type="text" name="weight" required>
-
 			<label for="height">Enter your height (cm)</label>
-			<input type="text" name="height" required>
+			<input type="text" name="height" value="<%= height %>" required>
+
+			<label for="weight">Enter your weight (kg)</label>
+			<input type="text" name="weight" value="<%= weight %>" required>
 
 			<button type="submit">Calculate</button>
 		</form>
